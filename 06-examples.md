@@ -422,7 +422,7 @@ Rule 2 - Block after closing:
       {
         "property": "LINES_COUNT",
         "operator": "GREATHER_THAN",
-        "value": { "value": "10" },
+        "value": { "count": "10" },
         "andConditions": []
       }
     ],

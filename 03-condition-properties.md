@@ -285,7 +285,7 @@ Example:
   "property": "LINES_COUNT",
   "operator": "GREATHER_THAN",
   "value": {
-    "value": "5"
+    "count": "5"
   }
 }
 ```

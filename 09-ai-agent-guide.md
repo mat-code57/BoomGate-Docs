@@ -306,6 +306,20 @@ Before finalizing a rule, verify:
 }
 ```
 
+### 5. Using "value" Instead of "count" for Count Properties
+
+**Wrong:**
+```json
+{ "property": "LINES_COUNT", "value": { "value": "5" } }  // Should use count!
+```
+
+**Correct:**
+```json
+{ "property": "LINES_COUNT", "value": { "count": "5" } }  // Correct
+```
+
+This applies to: `LINES_COUNT`, `PRODUCTS_TOTAL_COUNT`, `APPLIED_GIFT_CARDS_COUNT`, `APPLIED_DISCOUNT_CODES_COUNT`, `TOTAL_SHIPMENTS_COUNT`
+
 ---
 
 ## Value Reference
@@ -340,9 +354,47 @@ Before finalizing a rule, verify:
 { "value": "2024-12-31T23:59" }  // YYYY-MM-DDTHH:MM
 ```
 
-### Count Values (for aggregate properties)
+### Count Values (for aggregate properties with tags)
 ```json
 { "count": "5", "value": ["tag1", "tag2"] }
+```
+
+Use this format for properties that count items matching specific tags:
+- `LINES_WITH_ANY_TAG_COUNT`
+- `LINES_WITH_NO_TAGS_COUNT`
+- `PRODUCTS_WITH_ANY_TAG_TOTAL_COUNT`
+
+### Count-Only Values (NO_VALUE_PROPERTIES)
+
+These properties use ONLY `count`, NOT `value`:
+
+```json
+{ "count": "5" }
+```
+
+**IMPORTANT:** The following properties require `count` instead of `value`:
+- `LINES_COUNT` - Total line items in cart
+- `PRODUCTS_TOTAL_COUNT` - Total products in cart
+- `APPLIED_GIFT_CARDS_COUNT` - Gift cards applied
+- `APPLIED_DISCOUNT_CODES_COUNT` - Discount codes applied
+- `TOTAL_SHIPMENTS_COUNT` - Number of shipments
+
+**Correct example:**
+```json
+{
+  "property": "LINES_COUNT",
+  "operator": "GREATHER_THAN",
+  "value": { "count": "5" }
+}
+```
+
+**WRONG - will fail:**
+```json
+{
+  "property": "LINES_COUNT",
+  "operator": "GREATHER_THAN",
+  "value": { "value": "5" }
+}
 ```
 
 ---
