@@ -2,26 +2,70 @@
 
 Technical reference for AI agents and developers integrating with BoomGate.
 
+BoomGate supports 3 rule categories with the same condition engine:
+- **Checkout Validation** - Block checkout with error message
+- **Payment Customization** - Hide payment methods ([details](./11-payment-customization.md))
+- **Delivery Customization** - Hide delivery options ([details](./12-delivery-customization.md))
+
 ---
 
 ## Rule Schema
 
-### Complete Rule Object
+### Checkout Validation Rule
 
 ```typescript
-interface Rule {
+interface CheckoutValidationRule {
   title: string;                    // Human-readable rule name
   type: ValidationType;             // Validation type enum
-  configuration: Configuration;     // Rule logic
+  configuration: CheckoutValidationConfiguration;
   input: Input;                     // Pre-fetch configuration
 }
 
-interface Configuration {
+interface CheckoutValidationConfiguration {
   conditions: Condition[];          // Array of conditions
   msg: LocalizedMessage;            // Error messages by language
   mode: "ALL" | "ANY";              // Condition combination mode
   runOnCart?: boolean;              // Run on cart page (optional)
 }
+```
+
+### Payment Customization Rule
+
+```typescript
+interface PaymentCustomizationRule {
+  title: string;
+  type: ValidationType;
+  configuration: PaymentCustomizationConfiguration;
+  input: Input;
+}
+
+interface PaymentCustomizationConfiguration {
+  conditions: Condition[];
+  mode: "ALL" | "ANY";
+  action: "HIDE_PAYMENT_METHOD";    // Always this value
+  actionValue: string;              // Payment method name/pattern to hide
+}
+```
+
+### Delivery Customization Rule
+
+```typescript
+interface DeliveryCustomizationRule {
+  title: string;
+  type: ValidationType;
+  configuration: DeliveryCustomizationConfiguration;
+  input: Input;
+}
+
+interface DeliveryCustomizationConfiguration {
+  conditions: Condition[];
+  mode: "ALL" | "ANY";
+  action: "HIDE_DELIVERY_OPTION";   // Always this value
+  actionValue: string;              // Delivery option title/pattern to hide
+}
+```
+
+### Shared Types
 
 interface Condition {
   property: string;                 // Property to check
@@ -61,14 +105,19 @@ type ValidationType =
   | "TIME"
   | "ADDRESS"
   | "SHIPPING"
-  | "REDUCTION"  // Shopify Plus only
-  | "BILLING";   // Shopify Plus only
+  | "REDUCTION"    // Shopify Plus only
+  | "BILLING"      // Shopify Plus only
+  | "ADDRESS_PRODUCT";
 ```
 
 ### Type to Function ID Mapping
 
+All 3 rule categories share the same 11 validation types, each with its own extension:
+
+#### Checkout Validation Extensions
+
 ```javascript
-const FUNCTION_IDS = {
+const CHECKOUT_VALIDATION_IDS = {
   GENERAL: "checkout-validation",
   PRODUCT: "product-checkout-validation",
   CUSTOMER: "customer-checkout-validation",
@@ -78,7 +127,44 @@ const FUNCTION_IDS = {
   ADDRESS: "address-checkout-validation",
   SHIPPING: "shipping-checkout-validation",
   REDUCTION: "reduction-checkout-validation",
-  BILLING: "billing-address-checkout-validation"
+  BILLING: "billing-address-checkout-validation",
+  ADDRESS_PRODUCT: "address-product-checkout-validation"
+};
+```
+
+#### Payment Customization Extensions
+
+```javascript
+const PAYMENT_CUSTOMIZATION_IDS = {
+  GENERAL: "payment-customization-logic",
+  PRODUCT: "product-payment-customization",
+  CUSTOMER: "customer-payment-customization",
+  CART: "cart-payment-customization",
+  TAGS: "tags-payment-customization",
+  TIME: "time-payment-customization",
+  ADDRESS: "address-payment-customization",
+  SHIPPING: "shipping-payment-customization",
+  REDUCTION: "reduction-payment-customization",
+  BILLING: "billing-address-payment-customization",
+  ADDRESS_PRODUCT: "address-product-payment-customization"
+};
+```
+
+#### Delivery Customization Extensions
+
+```javascript
+const DELIVERY_CUSTOMIZATION_IDS = {
+  GENERAL: "delivery-customization-logic",
+  PRODUCT: "product-delivery-customization",
+  CUSTOMER: "customer-delivery-customization",
+  CART: "cart-delivery-customization",
+  TAGS: "tags-delivery-customization",
+  TIME: "time-delivery-customization",
+  ADDRESS: "address-delivery-customization",
+  SHIPPING: "shipping-delivery-customization",
+  REDUCTION: "reduction-delivery-customization",
+  BILLING: "billing-address-delivery-customization",
+  ADDRESS_PRODUCT: "address-product-delivery-customization"
 };
 ```
 
@@ -393,14 +479,62 @@ const SUPPORTED_LANGUAGES = [
 
 ## Metafield Storage
 
-Rules are stored in Shopify metafields:
+Rules are stored in Shopify metafields. Each rule category has its own namespace:
 
+### Checkout Validation
 ```
 Namespace: $app:checkout-validation
 Keys:
-  - configuration: JSON string of Configuration object
+  - configuration: JSON string (conditions, msg, mode)
   - input: JSON string of Input object
   - type: String validation type
+```
+
+### Payment Customization
+```
+Namespace: $app:payment-customization
+Keys:
+  - configuration: JSON string (conditions, mode, action, actionValue)
+  - input: JSON string of Input object
+```
+
+### Delivery Customization
+```
+Namespace: $app:delivery-customization
+Keys:
+  - configuration: JSON string (conditions, mode, action, actionValue)
+  - input: JSON string of Input object
+```
+
+### Configuration Differences
+
+**Checkout Validation configuration:**
+```json
+{
+  "conditions": [...],
+  "msg": { "en": "Error message" },
+  "mode": "ALL"
+}
+```
+
+**Payment Customization configuration:**
+```json
+{
+  "conditions": [...],
+  "mode": "ALL",
+  "action": "HIDE_PAYMENT_METHOD",
+  "actionValue": "Payment Method Name"
+}
+```
+
+**Delivery Customization configuration:**
+```json
+{
+  "conditions": [...],
+  "mode": "ALL",
+  "action": "HIDE_DELIVERY_OPTION",
+  "actionValue": "Delivery Option Title"
+}
 ```
 
 ---

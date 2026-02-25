@@ -25,3 +25,9 @@
 ## For AI Agents
 
 * [AI Agent Guide](09-ai-agent-guide.md)
+* [Limitations](10-limitations.md)
+
+## Payment & Delivery Rules
+
+* [Payment Customization](11-payment-customization.md)
+* [Delivery Customization](12-delivery-customization.md)

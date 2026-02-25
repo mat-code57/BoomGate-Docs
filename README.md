@@ -1,6 +1,6 @@
 # BoomGate Documentation
 
-Comprehensive documentation for BoomGate - Checkout Validation for Shopify.
+Comprehensive documentation for BoomGate - Checkout Rules for Shopify.
 
 ## Table of Contents
 
@@ -8,6 +8,7 @@ Comprehensive documentation for BoomGate - Checkout Validation for Shopify.
 
 1. [Introduction](./01-introduction.md)
    - Overview
+   - Rule Categories (Validation, Payment, Delivery)
    - Key Features
    - How It Works
    - Use Cases
@@ -18,6 +19,7 @@ Comprehensive documentation for BoomGate - Checkout Validation for Shopify.
    - GENERAL, PRODUCT, CUSTOMER, CART
    - TAGS, TIME, ADDRESS, SHIPPING
    - REDUCTION, BILLING (Shopify Plus)
+   - ADDRESS_PRODUCT
 
 3. [Condition Properties](./03-condition-properties.md)
    - Product Properties
@@ -60,7 +62,7 @@ Comprehensive documentation for BoomGate - Checkout Validation for Shopify.
 ### Technical Reference
 
 7. [API Reference](./07-api-reference.md)
-   - Rule Schema
+   - Rule Schema (all 3 categories)
    - Validation Types
    - Operators Reference
    - Properties Reference
@@ -83,36 +85,67 @@ Comprehensive documentation for BoomGate - Checkout Validation for Shopify.
    - Validation Checklist
    - Common Mistakes
 
+10. [Limitations](./10-limitations.md)
+    - What BoomGate Cannot Do
+    - Shopify Plus Requirements
+    - Property-Type Restrictions
+
+### Payment & Delivery Rules
+
+11. [Payment Customization](./11-payment-customization.md)
+    - Hide Payment Methods
+    - Configuration Schema
+    - actionValue Matching
+    - Examples
+    - AI Agent Guide for Payment Rules
+    - API Reference
+
+12. [Delivery Customization](./12-delivery-customization.md)
+    - Hide Delivery Options
+    - Configuration Schema
+    - actionValue Matching
+    - Examples
+    - AI Agent Guide for Delivery Rules
+    - API Reference
+
 ---
 
 ## Quick Start
 
-### 1. Choose a Validation Type
+### 1. Choose a Rule Category
 
-Based on what you want to validate:
+- **Block checkout?** → Checkout Validation
+- **Hide a payment method?** → Payment Customization ([guide](./11-payment-customization.md))
+- **Hide a delivery option?** → Delivery Customization ([guide](./12-delivery-customization.md))
+
+### 2. Choose a Validation Type
+
+Based on what data you need:
 - Products → PRODUCT
 - Customers → CUSTOMER
 - Addresses → ADDRESS
 - Time → TIME
 
-### 2. Define Conditions
+### 3. Define Conditions
 
 Each condition has:
 - **Property**: What to check
 - **Operator**: How to compare
 - **Value**: What to compare against
 
-### 3. Set Error Message
+### 4. Set the Action
 
-Clear message explaining why checkout is blocked.
+- **Checkout Validation:** Error message (`msg`)
+- **Payment Customization:** `action: "HIDE_PAYMENT_METHOD"` + `actionValue`
+- **Delivery Customization:** `action: "HIDE_DELIVERY_OPTION"` + `actionValue`
 
-### 4. Enable the Rule
+### 5. Enable the Rule
 
 Rules must be enabled to take effect.
 
 ---
 
-## Example Rule
+## Example: Checkout Validation Rule
 
 Block orders over 5 items for non-wholesale customers:
 
@@ -141,6 +174,60 @@ Block orders over 5 items for non-wholesale customers:
 }
 ```
 
+## Example: Payment Customization Rule
+
+Hide COD for international orders:
+
+```json
+{
+  "type": "ADDRESS",
+  "configuration": {
+    "conditions": [
+      {
+        "property": "ADDRESS_COUNTRY_CODE",
+        "operator": "DOES_NOT_EQUAL",
+        "value": { "value": "US" }
+      }
+    ],
+    "mode": "ALL",
+    "action": "HIDE_PAYMENT_METHOD",
+    "actionValue": "Cash on Delivery"
+  },
+  "input": {
+    "hasProductTags": [],
+    "cartAttributeKey": "BLANK"
+  }
+}
+```
+
+## Example: Delivery Customization Rule
+
+Hide express shipping for heavy products:
+
+```json
+{
+  "type": "TAGS",
+  "configuration": {
+    "conditions": [
+      {
+        "property": "PRODUCT_TAGS",
+        "operator": "HAS_ANY_TAG",
+        "value": { "value": ["heavy", "oversized"] }
+      }
+    ],
+    "mode": "ALL",
+    "action": "HIDE_DELIVERY_OPTION",
+    "actionValue": "Express"
+  },
+  "input": {
+    "hasAnyProductTag": ["heavy", "oversized"],
+    "hasProductTags": [],
+    "hasCustomerTags": [],
+    "lineAttributeKey": "BLANK"
+  }
+}
+```
+
 ---
 
 ## Support
@@ -160,5 +247,5 @@ Some features require Shopify Plus:
 
 ## Version
 
-Documentation version: 1.0
-Last updated: 2024
+Documentation version: 2.0
+Last updated: 2025
