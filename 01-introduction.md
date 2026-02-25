@@ -2,7 +2,7 @@
 
 ## Overview
 
-BoomGate is a powerful Shopify app that allows merchants to create custom checkout validation rules. Block or allow checkout based on products, customers, cart contents, shipping addresses, time constraints, and more.
+BoomGate is a powerful Shopify app that allows merchants to create custom checkout validation rules. Block or allow checkout based on products, customers, cart contents, shipping addresses, time constraints, and more. 1234
 
 ## Key Features
 
