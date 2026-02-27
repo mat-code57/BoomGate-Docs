@@ -32,7 +32,7 @@ Basic validation type for simple checkout conditions.
 - Cart totals and counts
 - Customer authentication status
 - Basic product information
-- Product aggregate totals: `PRODUCTS_WITH_VENDOR_TOTAL_COUNT`, `PRODUCTS_WITH_VENDOR_TOTAL_AMOUNT`, `PRODUCTS_WITH_HANDLE_TOTAL_AMOUNT`
+- Product aggregate totals: `PRODUCTS_WITH_VENDOR_TOTAL_COUNT`, `PRODUCTS_WITH_VENDOR_TOTAL_AMOUNT`, `PRODUCTS_WITH_HANDLE_TOTAL_COUNT`, `PRODUCTS_WITH_HANDLE_TOTAL_AMOUNT`
 
 ---
 
@@ -116,6 +116,8 @@ Validate cart-level attributes and aggregates.
 - `LINES_COUNT` - Number of line items
 - `LINE_QUANTITY` - Quantity per line
 - `LINE_ATTRIBUTE` - Line item attributes
+- `PRODUCTS_WITH_VENDOR_TOTAL_COUNT` - Sum quantity by vendor
+- `PRODUCTS_WITH_VENDOR_TOTAL_AMOUNT` - Sum amount by vendor
 - `PRODUCTS_WITH_HANDLE_TOTAL_COUNT` - Sum quantity by handle
 - `PRODUCTS_WITH_HANDLE_TOTAL_AMOUNT` - Sum amount by handle
 
@@ -252,8 +254,11 @@ Validate gift cards and discount codes.
 - `TOTAL_GIFT_CARD_DISCOUNTS_AMOUNT` - Total gift card value
 - `APPLIED_DISCOUNT_CODES_COUNT` - Number of discount codes
 - `APPLIED_DISCOUNT_CODE` - Specific discount code
+- `PRODUCT_TAGS` - Product tags
 - `PRODUCTS_WITH_VENDOR_TOTAL_COUNT` - Sum quantity by vendor
 - `PRODUCTS_WITH_VENDOR_TOTAL_AMOUNT` - Sum amount by vendor
+- `PRODUCTS_WITH_HANDLE_TOTAL_COUNT` - Sum quantity by handle
+- `PRODUCTS_WITH_HANDLE_TOTAL_AMOUNT` - Sum amount by handle
 - `PRODUCTS_WITH_ANY_TAG_TOTAL_COUNT` - Sum quantity by tags
 - `PRODUCTS_WITH_ANY_TAG_TOTAL_AMOUNT` - Sum amount by tags
 
@@ -281,8 +286,11 @@ Validate billing address fields.
 - `BILLING_ADDRESS_1` / `BILLING_ADDRESS_2`
 - `BILLING_ADDRESS_COMPANY`
 - `BILLING_ADDRESS_FIRST_NAME` / `BILLING_ADDRESS_LAST_NAME`
+- `PRODUCT_TAGS` - Product tags
 - `PRODUCTS_WITH_VENDOR_TOTAL_COUNT` - Sum quantity by vendor
 - `PRODUCTS_WITH_VENDOR_TOTAL_AMOUNT` - Sum amount by vendor
+- `PRODUCTS_WITH_HANDLE_TOTAL_COUNT` - Sum quantity by handle
+- `PRODUCTS_WITH_HANDLE_TOTAL_AMOUNT` - Sum amount by handle
 - `PRODUCTS_WITH_ANY_TAG_TOTAL_COUNT` - Sum quantity by tags
 - `PRODUCTS_WITH_ANY_TAG_TOTAL_AMOUNT` - Sum amount by tags
 
