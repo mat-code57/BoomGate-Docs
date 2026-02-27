@@ -63,11 +63,16 @@ Properties for counting and summing product data across the cart.
 | Property | Description | Value Type |
 |----------|-------------|------------|
 | `PRODUCTS_TOTAL_COUNT` | Total products in cart | Numeric |
-| `PRODUCTS_WITH_ANY_TAG_TOTAL_COUNT` | Count of products with specified tags | Numeric + Tags |
-| `PRODUCTS_WITH_HANDLE_TOTAL_COUNT` | Count of products with specific handle | Numeric + Handle |
-| `PRODUCTS_WITH_VENDOR_TOTAL_AMOUNT` | Amount/count from specific vendor | Numeric + Vendor |
+| `PRODUCTS_WITH_ANY_TAG_TOTAL_COUNT` | Sum of quantity of products with specified tags | Numeric + Tags |
+| `PRODUCTS_WITH_HANDLE_TOTAL_COUNT` | Sum of quantity of products with specific handle | Numeric + Handle |
+| `PRODUCTS_WITH_VENDOR_TOTAL_COUNT` | Sum of quantity of products from specific vendor | Numeric + Vendor |
+| `PRODUCTS_WITH_VENDOR_TOTAL_AMOUNT` | Sum of total amount of products from specific vendor | Amount + Vendor |
+| `PRODUCTS_WITH_HANDLE_TOTAL_AMOUNT` | Sum of total amount of products with specific handle | Amount + Handle |
+| `PRODUCTS_WITH_ANY_TAG_TOTAL_AMOUNT` | Sum of total amount of products with specified tags | Amount + Tags |
 
-### Example: Count Products with Tag
+### Quantity vs Amount Aggregates
+
+**Quantity properties** sum the `quantity` of matching lines and compare against a `count` value:
 
 ```json
 {
@@ -76,6 +81,47 @@ Properties for counting and summing product data across the cart.
   "value": {
     "value": ["free-gift"],
     "count": "1"
+  }
+}
+```
+
+**Amount properties** sum the monetary `totalAmount` of matching lines and compare against an `amount` value:
+
+```json
+{
+  "property": "PRODUCTS_WITH_ANY_TAG_TOTAL_AMOUNT",
+  "operator": "LESS_THAN",
+  "value": {
+    "value": ["premium"],
+    "amount": "1000"
+  }
+}
+```
+
+### Example: Vendor Total Quantity
+
+```json
+{
+  "property": "PRODUCTS_WITH_VENDOR_TOTAL_COUNT",
+  "operator": "GREATHER_THAN",
+  "value": {
+    "value": "Nike",
+    "count": "5"
+  }
+}
+```
+
+### Example: Handle Total Amount
+
+Use `"*"` as handle value to match ANY handle (triggers if any single product's total exceeds threshold):
+
+```json
+{
+  "property": "PRODUCTS_WITH_HANDLE_TOTAL_AMOUNT",
+  "operator": "GREATHER_THAN",
+  "value": {
+    "value": "*",
+    "amount": "500"
   }
 }
 ```

@@ -32,6 +32,7 @@ Basic validation type for simple checkout conditions.
 - Cart totals and counts
 - Customer authentication status
 - Basic product information
+- Product aggregate totals: `PRODUCTS_WITH_VENDOR_TOTAL_COUNT`, `PRODUCTS_WITH_VENDOR_TOTAL_AMOUNT`, `PRODUCTS_WITH_HANDLE_TOTAL_AMOUNT`
 
 ---
 
@@ -56,10 +57,17 @@ Validate checkout based on specific product attributes.
 - `PRODUCT_WEIGHT` - Product weight
 - `LINE_QUANTITY` - Quantity per line
 - `LINE_TOTAL` - Line item total
+- `PRODUCTS_WITH_VENDOR_TOTAL_COUNT` - Sum quantity by vendor
+- `PRODUCTS_WITH_VENDOR_TOTAL_AMOUNT` - Sum amount by vendor
+- `PRODUCTS_WITH_HANDLE_TOTAL_COUNT` - Sum quantity by handle
+- `PRODUCTS_WITH_HANDLE_TOTAL_AMOUNT` - Sum amount by handle
+- `PRODUCTS_WITH_ANY_TAG_TOTAL_COUNT` - Sum quantity by tags
+- `PRODUCTS_WITH_ANY_TAG_TOTAL_AMOUNT` - Sum amount by tags
 
 **Example Use Cases:**
 - "Block checkout if SKU 'LIMITED-001' quantity exceeds 1"
 - "Require minimum 10 units for products in 'wholesale' collection"
+- "Block if total spend on Nike products exceeds $500"
 
 ---
 
@@ -108,11 +116,14 @@ Validate cart-level attributes and aggregates.
 - `LINES_COUNT` - Number of line items
 - `LINE_QUANTITY` - Quantity per line
 - `LINE_ATTRIBUTE` - Line item attributes
+- `PRODUCTS_WITH_HANDLE_TOTAL_COUNT` - Sum quantity by handle
+- `PRODUCTS_WITH_HANDLE_TOTAL_AMOUNT` - Sum amount by handle
 
 **Example Use Cases:**
 - "Minimum order value of $50"
 - "Maximum 10 items per order"
 - "Block checkout if cart attribute 'gift_wrap' is missing"
+- "Block if any single product total exceeds $500"
 
 ---
 
@@ -132,11 +143,18 @@ Combine product and customer tags for complex rules.
 - `LINES_WITH_ANY_TAG_COUNT` - Count lines with specific tags
 - `LINES_WITH_NO_TAGS_COUNT` - Count untagged lines
 - `LINE_QUANTITY` - Quantity per line
+- `PRODUCTS_WITH_VENDOR_TOTAL_COUNT` - Sum quantity by vendor
+- `PRODUCTS_WITH_VENDOR_TOTAL_AMOUNT` - Sum amount by vendor
+- `PRODUCTS_WITH_HANDLE_TOTAL_COUNT` - Sum quantity by handle
+- `PRODUCTS_WITH_HANDLE_TOTAL_AMOUNT` - Sum amount by handle
+- `PRODUCTS_WITH_ANY_TAG_TOTAL_COUNT` - Sum quantity by tags
+- `PRODUCTS_WITH_ANY_TAG_TOTAL_AMOUNT` - Sum amount by tags
 
 **Example Use Cases:**
 - "Customers tagged 'restricted' cannot buy products tagged 'premium'"
 - "Maximum 1 free-gift tagged item per order"
 - "Wholesale customers must buy in multiples of 10"
+- "Block if total amount of 'premium' tagged products exceeds $1000"
 
 ---
 
@@ -155,6 +173,7 @@ Validate based on date and time constraints.
 - `TIME` - Current time (shop timezone)
 - `DATE_TIME` - Current datetime
 - All product and customer properties (for combination rules)
+- `PRODUCTS_WITH_VENDOR_TOTAL_COUNT` - Sum quantity by vendor
 
 **Operators:**
 - `DATE_AFTER` / `DATE_BEFORE`
@@ -233,6 +252,10 @@ Validate gift cards and discount codes.
 - `TOTAL_GIFT_CARD_DISCOUNTS_AMOUNT` - Total gift card value
 - `APPLIED_DISCOUNT_CODES_COUNT` - Number of discount codes
 - `APPLIED_DISCOUNT_CODE` - Specific discount code
+- `PRODUCTS_WITH_VENDOR_TOTAL_COUNT` - Sum quantity by vendor
+- `PRODUCTS_WITH_VENDOR_TOTAL_AMOUNT` - Sum amount by vendor
+- `PRODUCTS_WITH_ANY_TAG_TOTAL_COUNT` - Sum quantity by tags
+- `PRODUCTS_WITH_ANY_TAG_TOTAL_AMOUNT` - Sum amount by tags
 
 **Example Use Cases:**
 - "Maximum 1 gift card per order"
@@ -258,6 +281,10 @@ Validate billing address fields.
 - `BILLING_ADDRESS_1` / `BILLING_ADDRESS_2`
 - `BILLING_ADDRESS_COMPANY`
 - `BILLING_ADDRESS_FIRST_NAME` / `BILLING_ADDRESS_LAST_NAME`
+- `PRODUCTS_WITH_VENDOR_TOTAL_COUNT` - Sum quantity by vendor
+- `PRODUCTS_WITH_VENDOR_TOTAL_AMOUNT` - Sum amount by vendor
+- `PRODUCTS_WITH_ANY_TAG_TOTAL_COUNT` - Sum quantity by tags
+- `PRODUCTS_WITH_ANY_TAG_TOTAL_AMOUNT` - Sum amount by tags
 
 **Example Use Cases:**
 - "Block orders with billing address from high-risk countries"

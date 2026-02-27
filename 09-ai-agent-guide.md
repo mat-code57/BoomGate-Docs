@@ -224,7 +224,7 @@ Each property can ONLY be used with specific validation types. This is enforced 
 | TIME | DATE, TIME, DATE_TIME |
 | REDUCTION | APPLIED_GIFT_CARDS_COUNT, APPLIED_DISCOUNT_CODES_COUNT, APPLIED_DISCOUNT_CODE, TOTAL_GIFT_CARD_DISCOUNTS_AMOUNT |
 | CUSTOMER | CUSTOMER_METAFIELD, CUSTOMER_ORDER_NUMBER, CUSTOMER_AMOUNT_SPENT |
-| PRODUCT | PRODUCT_COLLECTION, PRODUCT_METAFIELD |
+| PRODUCT | PRODUCT_COLLECTION, PRODUCT_METAFIELD, all PRODUCTS_WITH_*_TOTAL_* aggregates |
 
 ### Common Shared Properties:
 
@@ -271,6 +271,11 @@ If using `PRODUCT_TAGS` with:
 - `HAS_TAGS` → add tags to `hasProductTags`
 - `HAS_ANY_TAG` → add tags to `hasAnyProductTag`
 - `DOES_NOT_HAVE_TAGS` → add tags to `hasProductTags`
+
+If using tag-based aggregate properties:
+- `PRODUCTS_WITH_ANY_TAG_TOTAL_COUNT` → add tags to `hasAnyProductTag`
+- `PRODUCTS_WITH_ANY_TAG_TOTAL_AMOUNT` → add tags to `hasAnyProductTag`
+- `LINES_WITH_ANY_TAG_COUNT` → add tags to `hasAnyProductTag`
 
 ### For Customer Tags
 
@@ -460,6 +465,8 @@ Before finalizing a rule, verify:
 
 This applies to: `LINES_COUNT`, `PRODUCTS_TOTAL_COUNT`, `APPLIED_GIFT_CARDS_COUNT`, `APPLIED_DISCOUNT_CODES_COUNT`, `TOTAL_SHIPMENTS_COUNT`
 
+**Also note:** Aggregate quantity properties use `count` (not `value`) for the threshold, and aggregate amount properties use `amount` (not `value` or `count`) for the threshold. See "Count Values" and "Amount Values" sections above.
+
 ---
 
 ## Value Reference
@@ -494,15 +501,27 @@ This applies to: `LINES_COUNT`, `PRODUCTS_TOTAL_COUNT`, `APPLIED_GIFT_CARDS_COUN
 { "value": "2024-12-31T23:59" }  // YYYY-MM-DDTHH:MM
 ```
 
-### Count Values (for aggregate properties with tags)
+### Count Values (for aggregate quantity properties)
 ```json
 { "count": "5", "value": ["tag1", "tag2"] }
 ```
 
-Use this format for properties that count items matching specific tags:
-- `LINES_WITH_ANY_TAG_COUNT`
-- `LINES_WITH_NO_TAGS_COUNT`
-- `PRODUCTS_WITH_ANY_TAG_TOTAL_COUNT`
+Use this format for properties that sum **quantity** of items matching a filter:
+- `LINES_WITH_ANY_TAG_COUNT` — count + tags array
+- `LINES_WITH_NO_TAGS_COUNT` — count + tags array
+- `PRODUCTS_WITH_ANY_TAG_TOTAL_COUNT` — count + tags array
+- `PRODUCTS_WITH_VENDOR_TOTAL_COUNT` — count + vendor string: `{ "count": "5", "value": "Nike" }`
+- `PRODUCTS_WITH_HANDLE_TOTAL_COUNT` — count + handle string: `{ "count": "3", "value": "my-product" }`
+
+### Amount Values (for aggregate monetary properties)
+```json
+{ "amount": "500", "value": "Nike" }
+```
+
+Use this format for properties that sum **monetary total amount** of items matching a filter:
+- `PRODUCTS_WITH_VENDOR_TOTAL_AMOUNT` — amount + vendor string: `{ "amount": "500", "value": "Nike" }`
+- `PRODUCTS_WITH_HANDLE_TOTAL_AMOUNT` — amount + handle string: `{ "amount": "500", "value": "my-product" }` (use `"*"` for any handle)
+- `PRODUCTS_WITH_ANY_TAG_TOTAL_AMOUNT` — amount + tags array: `{ "amount": "1000", "value": ["premium"] }`
 
 ### Count-Only Values (NO_VALUE_PROPERTIES)
 

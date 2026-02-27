@@ -513,6 +513,150 @@ Rule 2 - Block after closing:
 
 ---
 
+## Product Aggregate Rules
+
+### Limit Total Quantity per Vendor
+
+Block if more than 5 Nike products in cart.
+
+**Type:** PRODUCT
+
+```json
+{
+  "title": "Max 5 Nike products per order",
+  "type": "PRODUCT",
+  "configuration": {
+    "conditions": [
+      {
+        "property": "PRODUCTS_WITH_VENDOR_TOTAL_COUNT",
+        "operator": "GREATHER_THAN",
+        "value": {
+          "value": "Nike",
+          "count": "5"
+        },
+        "andConditions": []
+      }
+    ],
+    "msg": {
+      "en": "Maximum 5 Nike products per order"
+    },
+    "mode": "ALL"
+  },
+  "input": {
+    "productMetafieldNamespace": "BLANK",
+    "productMetafieldKey": "BLANK",
+    "lineAttributeKey": "BLANK"
+  }
+}
+```
+
+### Limit Total Amount per Handle
+
+Block if any single product's total exceeds $500 (using wildcard `*`).
+
+**Type:** PRODUCT
+
+```json
+{
+  "title": "Max $500 per product",
+  "type": "PRODUCT",
+  "configuration": {
+    "conditions": [
+      {
+        "property": "PRODUCTS_WITH_HANDLE_TOTAL_AMOUNT",
+        "operator": "GREATHER_THAN",
+        "value": {
+          "value": "*",
+          "amount": "500"
+        },
+        "andConditions": []
+      }
+    ],
+    "msg": {
+      "en": "Maximum $500 per product per order"
+    },
+    "mode": "ALL"
+  },
+  "input": {
+    "productMetafieldNamespace": "BLANK",
+    "productMetafieldKey": "BLANK",
+    "lineAttributeKey": "BLANK"
+  }
+}
+```
+
+### Limit Total Amount for Tagged Products
+
+Block if total of "premium" tagged products exceeds $1000.
+
+**Type:** TAGS
+
+```json
+{
+  "title": "Max $1000 for premium products",
+  "type": "TAGS",
+  "configuration": {
+    "conditions": [
+      {
+        "property": "PRODUCTS_WITH_ANY_TAG_TOTAL_AMOUNT",
+        "operator": "GREATHER_THAN",
+        "value": {
+          "value": ["premium"],
+          "amount": "1000"
+        },
+        "andConditions": []
+      }
+    ],
+    "msg": {
+      "en": "Maximum $1000 total for premium products per order"
+    },
+    "mode": "ALL"
+  },
+  "input": {
+    "hasAnyProductTag": ["premium"],
+    "hasProductTags": [],
+    "lineAttributeKey": "BLANK"
+  }
+}
+```
+
+### Limit Total Amount per Vendor
+
+Block if total spend on a specific vendor exceeds $2000.
+
+**Type:** PRODUCT
+
+```json
+{
+  "title": "Max $2000 for Apple products",
+  "type": "PRODUCT",
+  "configuration": {
+    "conditions": [
+      {
+        "property": "PRODUCTS_WITH_VENDOR_TOTAL_AMOUNT",
+        "operator": "GREATHER_THAN",
+        "value": {
+          "value": "Apple",
+          "amount": "2000"
+        },
+        "andConditions": []
+      }
+    ],
+    "msg": {
+      "en": "Maximum $2000 total for Apple products per order"
+    },
+    "mode": "ALL"
+  },
+  "input": {
+    "productMetafieldNamespace": "BLANK",
+    "productMetafieldKey": "BLANK",
+    "lineAttributeKey": "BLANK"
+  }
+}
+```
+
+---
+
 ## Shipping Method Rules
 
 ### Block Pickup for Large Items
